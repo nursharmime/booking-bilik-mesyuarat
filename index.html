@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tempahan Bilik Mesyuarat</title>
+    <!-- Muatkan Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Muatkan FontAwesome untuk ikon kalendar, tong sampah & kunci -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Muatkan Fon Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Warna latar belakang panel biru cair (aqua) mengikut gambar */
+        .panel-aqua {
+            background-color: #93f5f8 !important;
+        }
+        /* Warna biru diraja untuk pengepala dan butang */
+        .royal-blue {
+            background-color: #0b48d4;
+        }
+        .royal-blue-hover:hover {
+            background-color: #093ab0;
+        }
+        /* Gaya bar skrol tersuai supaya kemas seperti dalam gambar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #6b7280;
+            border-radius: 9999px;
+        }
+        /* Sembunyikan ikon kalendar asal pelayar supaya ikon kotak biru tersuai menyerlah */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 44px;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-2 sm:p-4 md:p-6 flex items-center justify-center">
+
+    <!-- Bekas Utama (2 Lajur seperti gambar asal) -->
+    <div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-3 bg-white p-1.5 rounded-lg shadow-lg">
+        
+        <!-- PANEL KIRI: Borang Tempahan Bilik Mesyuarat -->
+        <div class="panel-aqua p-5 sm:p-7 rounded-md flex flex-col justify-between h-full">
+            <div>
+                <!-- Tajuk Pengepala Kiri -->
+                <div class="royal-blue text-white font-bold text-center py-3 px-4 rounded-sm tracking-wide text-sm sm:text-base uppercase shadow-sm mb-5">
+                    TEMPAHAN BILIK MESYUARAT
+                </div>
+
+                <!-- Borang Input -->
+                <form id="bookingForm" class="space-y-3.5">
+                    <!-- Nama Pemohon -->
+                    <div>
+                        <label for="namaPemohon" class="block text-xs sm:text-sm font-semibold text-gray-800 uppercase mb-1">
+                            NAMA PEMOHON
+                        </label>
+                        <input type="text" id="namaPemohon"
+                            class="w-full bg-white text-gray-800 px-3.5 py-2 rounded-sm border border-transparent focus:border-blue-600 focus:outline-none text-sm shadow-sm transition uppercase"
+                            placeholder="">
+                    </div>
+
+                    <!-- Emel Pemohon (Digunakan untuk pengesahan hak milik semasa padam) -->
+                    <div>
+                        <label for="emelPemohon" class="block text-xs sm:text-sm font-semibold text-gray-800 uppercase mb-1">
+                            EMEL PEMOHON
+                        </label>
+                        <input type="email" id="emelPemohon" autocomplete="off"
+                            class="w-full bg-white text-gray-800 px-3.5 py-2 rounded-sm border border-transparent focus:border-blue-600 focus:outline-none text-sm shadow-sm transition placeholder-gray-400"
+                            placeholder="Contoh: nama@domain.com">
+                    </div>
+
+                    <!-- Jabatan -->
+                    <div>
+                        <label for="jabatan" class="block text-xs sm:text-sm font-semibold text-gray-800 uppercase mb-1">
+                            JABATAN
+                        </label>
+                        <input type="text" id="jabatan"
+                            class="w-full bg-white text-gray-800 px-3.5 py-2 rounded-sm border border-transparent focus:border-blue-600 focus:outline-none text-sm shadow-sm transition uppercase"
+                            placeholder="">
+                    </div>
+
+                    <!-- Tujuan -->
+                    <div>
+                        <label for="tujuan" class="block text-xs sm:text-sm font-semibold text-gray-800 uppercase mb-1">
+                            TUJUAN
+                        </label>
+                        <input type="text" id="tujuan"
+                            class="w-full bg-white text-gray-800 px-3.5 py-2 rounded-sm border border-transparent focus:border-blue-600 focus:outline-none text-sm shadow-sm transition uppercase"
+                            placeholder="">
+                    </div>
+
+                    <!-- Tarikh Tempahan -->
+                    <div>
+                        <label for="tarikhTempahan" class="block text-xs sm:text-sm font-semibold text-gray-800 uppercase mb-1">
+                            TARIKH TEMPAHAN
+                        </label>
+                        <div class="relative flex items-center w-full bg-white rounded-sm shadow-sm overflow-hidden">
+                            <input type="date" id="tarikhTempahan"
+                                class="w-full bg-white text-gray-800 px-3.5 py-2 focus:outline-none text-sm">
+                            <!-- Kotak Ikon Kalendar Biru di sebelah kanan -->
+                            <div class="bg-[#0e68ce] text-white px-3.5 py-2 flex items-center justify-center pointer-events-none">
+                                <i class="fa-regular fa-calendar-days text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Masa Mula -->
+                    <div>
+                        <label for="masaMula" class="block text-xs sm:text-sm font-semibold text-gray-800 uppercase mb-1">
+                            MASA MULA
+                        </label>
+                        <input type="text" id="masaMula"
+                            class="w-full bg-white text-gray-800 px-3.5 py-2 rounded-sm border border-transparent focus:border-blue-600 focus:outline-none text-sm shadow-sm transition placeholder-gray-400"
+                            placeholder="Contoh: 09:00 atau 14:30">
+                    </div>
+
+                    <!-- Masa Tamat -->
+                    <div>
+                        <label for="masaTamat" class="block text-xs sm:text-sm font-semibold text-gray-800 uppercase mb-1">
+                            MASA TAMAT
+                        </label>
+                        <input type="text" id="masaTamat"
+                            class="w-full bg-white text-gray-800 px-3.5 py-2 rounded-sm border border-transparent focus:border-blue-600 focus:outline-none text-sm shadow-sm transition placeholder-gray-400"
+                            placeholder="Contoh : 10:00 atau 16:00">
+                    </div>
+
+                    <!-- Butang Hantar -->
+                    <div class="pt-2 flex justify-center">
+                        <button type="submit"
+                            class="royal-blue royal-blue-hover text-white font-bold py-2.5 px-10 rounded-sm text-xs sm:text-sm uppercase tracking-wider shadow transition transform active:scale-95 cursor-pointer">
+                            SAHKAN TEMPAHAN
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- PANEL KANAN: Senarai Tempahan Semasa -->
+        <div class="panel-aqua p-5 sm:p-7 rounded-md flex flex-col h-[580px] md:h-full max-h-[750px]">
+            <!-- Tajuk Pengepala Kanan -->
+            <div class="royal-blue text-white font-bold text-center py-3 px-4 rounded-sm tracking-wide text-sm sm:text-base uppercase shadow-sm mb-4">
+                SENARAI TEMPAHAN SEMASA
+            </div>
+
+            <!-- Kotak Carian -->
+            <div class="flex justify-center mb-4">
+                <input type="text" id="searchInput"
+                    class="w-full sm:w-4/5 bg-white text-gray-700 px-4 py-2 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm sm:text-base placeholder-gray-500 text-center sm:text-left"
+                    placeholder="Cari nama pemohon atau tarikh...">
+            </div>
+
+            <!-- Senarai Rekod Tempahan -->
+            <div id="bookingList" class="flex-1 overflow-y-auto custom-scrollbar pr-1 space-y-0.5">
+                <!-- Item tempahan akan dijana oleh JavaScript -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Pengesahan Padam (Dengan Semakan Emel Pemilik) -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4 flex">
+        <div class="bg-white rounded-lg max-w-sm w-full p-6 shadow-xl">
+            <h3 class="text-lg font-bold text-gray-900 mb-1">Sahkan Pemadaman</h3>
+            <p class="text-xs text-gray-600 mb-3">
+                Masukkan emel pendaftar asal untuk memadam tempahan atas nama <span id="deleteTargetName" class="font-bold text-gray-900"></span>:
+            </p>
+            <input type="email" id="verifyDeleteEmailInput" autocomplete="off"
+                class="w-full border border-gray-300 rounded-sm px-3 py-2 text-sm mb-4 focus:outline-none focus:border-blue-600"
+                placeholder="Masukkan emel pendaftar...">
+            <div class="flex justify-end space-x-3">
+                <button id="cancelDeleteBtn" type="button"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition cursor-pointer">
+                    Batal
+                </button>
+                <button id="confirmDeleteBtn" type="button"
+                    class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition cursor-pointer">
+                    Sahkan & Padam
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifikasi Toast (Menggantikan Notify Power Apps & alert) -->
+    <div id="toastMessage" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none max-w-md">
+        <div id="toastContent" class="bg-gray-900 text-white px-5 py-3.5 rounded-md shadow-lg flex items-center space-x-3 text-xs sm:text-sm font-medium">
+            <i id="toastIcon" class="fa-solid fa-circle-check text-green-400 text-base shrink-0"></i>
+            <span id="toastText">Mesej sistem</span>
+        </div>
+    </div>
+
+    <script>
+        // Kosongkan data tempahan awal supaya pengguna boleh mula memasukkan tempahan baharu dengan emel
+        const defaultBookings = [];
+
+        // Gunakan kunci simpanan baharu supaya rekod lama yang tiada emel/tujuan dikosongkan
+        const STORAGE_KEY = 'bilikMesyuaratBookings_v2';
+        let bookings = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultBookings;
+        let itemToDeleteId = null;
+
+        // Rujukan elemen DOM
+        const bookingForm = document.getElementById('bookingForm');
+        const tarikhInput = document.getElementById('tarikhTempahan');
+        const emelInput = document.getElementById('emelPemohon');
+        const bookingListEl = document.getElementById('bookingList');
+        const searchInput = document.getElementById('searchInput');
+        
+        // Elemen Modal & Toast
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteTargetName = document.getElementById('deleteTargetName');
+        const verifyDeleteEmailInput = document.getElementById('verifyDeleteEmailInput');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const toastMessage = document.getElementById('toastMessage');
+        const toastContent = document.getElementById('toastContent');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastText = document.getElementById('toastText');
+
+        // Tetapkan tarikh lalai kepada 12/11/2026 seperti dalam gambar
+        tarikhInput.value = '2026-11-12';
+
+        // Tukar input Nama Pemohon, Jabatan dan Tujuan kepada HURUF BESAR secara automatik semasa menaip
+        ['namaPemohon', 'jabatan', 'tujuan'].forEach(fieldId => {
+            const fieldEl = document.getElementById(fieldId);
+            fieldEl.addEventListener('input', function() {
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                this.value = this.value.toUpperCase();
+                this.setSelectionRange(start, end);
+            });
+        });
+
+        // Format tarikh dari YYYY-MM-DD kepada DD/MM/YYYY
+        function formatDateToMY(isoDate) {
+            if (!isoDate) return '';
+            const parts = isoDate.split('-');
+            if (parts.length !== 3) return isoDate;
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        // Tukar rentetan masa (cth: "9:00" atau "14:30") kepada jumlah minit untuk perbandingan (bersamaan TimeValue di Power Apps)
+        function timeToMinutes(timeStr) {
+            const [hours, minutes] = timeStr.trim().split(':').map(Number);
+            return (hours * 60) + minutes;
+        }
+
+        // Simpan ke localStorage
+        function saveBookings() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
+        }
+
+        // Papar notifikasi toast (menggantikan Notify() Power Apps)
+        let toastTimeout;
+        function showToast(message, isError = false) {
+            toastText.textContent = message;
+            if (isError) {
+                toastContent.className = 'bg-red-700 text-white px-5 py-3.5 rounded-md shadow-lg flex items-center space-x-3 text-xs sm:text-sm font-medium border border-red-400';
+                toastIcon.className = 'fa-solid fa-circle-exclamation text-white text-base shrink-0';
+            } else {
+                toastContent.className = 'bg-gray-900 text-white px-5 py-3.5 rounded-md shadow-lg flex items-center space-x-3 text-xs sm:text-sm font-medium';
+                toastIcon.className = 'fa-solid fa-circle-check text-green-400 text-base shrink-0';
+            }
+            
+            toastMessage.classList.remove('translate-y-20', 'opacity-0');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toastMessage.classList.add('translate-y-20', 'opacity-0');
+            }, 4000);
+        }
+
+        // Jana paparan senarai tempahan di panel kanan (mengekalkan rupa asal gambar)
+        function renderBookings(filterText = '') {
+            bookingListEl.innerHTML = '';
+            const query = filterText.toLowerCase().trim();
+
+            const filtered = bookings.filter(item => {
+                const formattedDate = formatDateToMY(item.tarikh);
+                return (
+                    item.nama.toLowerCase().includes(query) ||
+                    (item.tujuan && item.tujuan.toLowerCase().includes(query)) ||
+                    formattedDate.includes(query) ||
+                    item.tarikh.includes(query)
+                );
+            });
+
+            if (filtered.length === 0) {
+                bookingListEl.innerHTML = `
+                    <div class="text-center py-10 text-gray-600 text-sm">
+                        Tiada rekod tempahan ditemui.
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const formattedDate = formatDateToMY(item.tarikh);
+                const itemDiv = document.createElement('div');
+                
+                // Gaya jalur biru di sebelah kiri jika item dipilih (seperti baris MIME dalam gambar)
+                const activeBorderClass = item.selected ? 'border-l-4 border-[#0b48d4] pl-3' : 'pl-2';
+                
+                itemDiv.className = `flex items-center justify-between py-2.5 pr-3 border-b-2 border-white/90 hover:bg-white/25 transition cursor-pointer ${activeBorderClass}`;
+                
+                itemDiv.innerHTML = `
+                    <div class="flex-1" onclick="selectBooking(${item.id})">
+                        <div class="font-bold text-gray-800 text-xs sm:text-sm uppercase tracking-wide">
+                            ${escapeHTML(item.nama)}
+                        </div>
+                        <div class="text-[11px] sm:text-xs text-gray-600 mt-0.5">
+                            ${formattedDate} | ${escapeHTML(item.masaMula)} - ${escapeHTML(item.masaTamat)}
+                        </div>
+                        ${item.tujuan ? `<div class="text-[11px] text-gray-700 font-medium mt-0.5 uppercase">${escapeHTML(item.tujuan)}</div>` : ''}
+                    </div>
+                    <button type="button" onclick="promptDelete(${item.id})" title="Padam Tempahan"
+                        class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-100/50 transition cursor-pointer">
+                        <i class="fa-regular fa-trash-can text-sm sm:text-base"></i>
+                    </button>
+                `;
+                bookingListEl.appendChild(itemDiv);
+            });
+        }
+
+        // Elakkan suntikan XSS
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // Tandakan baris yang diklik (jalur biru di kiri)
+        window.selectBooking = function(id) {
+            bookings = bookings.map(b => ({
+                ...b,
+                selected: b.id === id ? !b.selected : false
+            }));
+            saveBookings();
+            renderBookings(searchInput.value);
+        };
+
+        // Buka modal pengesahan padam dan minta pengguna menaip emel pendaftar asal
+        window.promptDelete = function(id) {
+            const target = bookings.find(b => b.id === id);
+            if (!target) return;
+
+            itemToDeleteId = id;
+            deleteTargetName.textContent = target.nama;
+            
+            // Sentiasa kosongkan ruangan pengesahan supaya pengguna wajib menaip sendiri emel asal
+            verifyDeleteEmailInput.value = '';
+            
+            deleteModal.classList.remove('hidden');
+            verifyDeleteEmailInput.focus();
+        };
+
+        // Batal padam
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteModal.classList.add('hidden');
+            itemToDeleteId = null;
+            verifyDeleteEmailInput.value = '';
+        });
+
+        // Sahkan padam hanya jika emel sepadan dengan emel pendaftar asal
+        confirmDeleteBtn.addEventListener('click', () => {
+            if (itemToDeleteId !== null) {
+                const target = bookings.find(b => b.id === itemToDeleteId);
+                const enteredEmail = verifyDeleteEmailInput.value.trim().toLowerCase();
+
+                if (!enteredEmail) {
+                    showToast('Sila masukkan alamat emel untuk pengesahan pemadaman.', true);
+                    return;
+                }
+
+                if (target && target.emel && target.emel.toLowerCase() === enteredEmail) {
+                    bookings = bookings.filter(b => b.id !== itemToDeleteId);
+                    
+                    saveBookings();
+                    renderBookings(searchInput.value);
+                    showToast('Tempahan berjaya dipadam.');
+                    
+                    deleteModal.classList.add('hidden');
+                    itemToDeleteId = null;
+                    verifyDeleteEmailInput.value = '';
+                } else {
+                    showToast('Akses ditolak! Emel tidak sepadan dengan emel pendaftar tempahan ini.', true);
+                }
+            }
+        });
+
+        // Pengendalian penghantaran borang mengikut logik pengesahan Power Apps
+        bookingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const rawNama = document.getElementById('namaPemohon').value;
+            const rawEmel = document.getElementById('emelPemohon').value.trim().toLowerCase();
+            const rawJabatan = document.getElementById('jabatan').value;
+            const rawTujuan = document.getElementById('tujuan').value;
+            const tarikh = document.getElementById('tarikhTempahan').value;
+            const rawMasaMula = document.getElementById('masaMula').value;
+            const rawMasaTamat = document.getElementById('masaTamat').value;
+
+            const isNamaInvalid = rawNama.trim() === '' || rawNama !== rawNama.toUpperCase();
+            const isJabatanInvalid = rawJabatan.trim() === '' || rawJabatan !== rawJabatan.toUpperCase();
+            const isTujuanInvalid = rawTujuan.trim() === '' || rawTujuan !== rawTujuan.toUpperCase();
+
+            // 1. Semak jika semua (Nama Pemohon, Jabatan dan Tujuan) kosong atau bukan HURUF BESAR
+            if (isNamaInvalid && isJabatanInvalid && isTujuanInvalid) {
+                showToast('Sila masukkan Nama Pemohon, Jabatan dan Tujuan dalam HURUF BESAR sepenuhnya.', true);
+                return;
+            }
+
+            // 2. Semak jika Nama Pemohon dan Jabatan kosong atau bukan HURUF BESAR
+            if (isNamaInvalid && isJabatanInvalid) {
+                showToast('Sila masukkan Nama Pemohon dan Jabatan dalam HURUF BESAR sepenuhnya.', true);
+                return;
+            }
+
+            // 2. Semak jika Nama Pemohon sahaja kosong atau bukan HURUF BESAR
+            if (isNamaInvalid) {
+                showToast('Sila masukkan Nama Pemohon dalam HURUF BESAR sepenuhnya.', true);
+                return;
+            }
+
+            // 3. Semak format Emel Pemohon
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!rawEmel || !emailRegex.test(rawEmel)) {
+                showToast('Sila masukkan alamat Emel Pemohon yang sah.', true);
+                return;
+            }
+
+            // 4. Semak jika Nama Jabatan sahaja kosong atau bukan HURUF BESAR
+            if (isJabatanInvalid) {
+                showToast('Sila masukkan Nama Jabatan dalam HURUF BESAR sepenuhnya.', true);
+                return;
+            }
+
+            // 5. Semak jika Tujuan kosong atau bukan HURUF BESAR
+            if (isTujuanInvalid) {
+                showToast('Sila masukkan Tujuan dalam HURUF BESAR sepenuhnya.', true);
+                return;
+            }
+
+            // 6. Semak jika Tarikh Tempahan kosong
+            if (!tarikh) {
+                showToast('Sila pilih Tarikh Tempahan.', true);
+                return;
+            }
+
+            // 7. Semak format masa menggunakan Regex Power Apps: ^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$
+            const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+            const masaMula = rawMasaMula.trim();
+            const masaTamat = rawMasaTamat.trim();
+
+            if (!timeRegex.test(masaMula) || !timeRegex.test(masaTamat)) {
+                showToast('Format masa tidak sah! Sila masukkan format seperti 12:00.', true);
+                return;
+            }
+
+            // Tukar masa input kepada minit untuk perbandingan julat waktu (TimeValue)
+            const newStartMins = timeToMinutes(masaMula);
+            const newEndMins = timeToMinutes(masaTamat);
+
+            // Tambahan keselamatan: pastikan masa tamat selepas masa mula
+            if (newEndMins <= newStartMins) {
+                showToast('Masa Tamat mestilah selepas Masa Mula.', true);
+                return;
+            }
+
+            // 8. Semak pertindihan waktu (varBertindih) pada tarikh yang dipilih
+            const rekodHariIni = bookings.filter(b => b.tarikh === tarikh);
+            const varBertindih = rekodHariIni.filter(b => {
+                const existingStartMins = timeToMinutes(b.masaMula);
+                const existingEndMins = timeToMinutes(b.masaTamat);
+
+                return (
+                    (existingStartMins >= newStartMins && existingStartMins < newEndMins) ||
+                    (existingEndMins > newStartMins && existingEndMins <= newEndMins) ||
+                    (existingStartMins <= newStartMins && existingEndMins >= newEndMins)
+                );
+            }).length;
+
+            if (varBertindih > 0) {
+                showToast('Waktu tempahan telah ditempah! Sila pilih waktu lain.', true);
+                return;
+            }
+
+            // 9. Jika semua syarat lulus (SubmitForm), simpan tempahan baharu
+            const newBooking = {
+                id: Date.now(),
+                nama: rawNama.trim().toUpperCase(),
+                emel: rawEmel,
+                jabatan: rawJabatan.trim().toUpperCase(),
+                tujuan: rawTujuan.trim().toUpperCase(),
+                tarikh: tarikh,
+                masaMula: masaMula,
+                masaTamat: masaTamat,
+                selected: true
+            };
+
+            // Nyahpilih item lain dan masukkan item baharu
+            bookings = bookings.map(b => ({ ...b, selected: false }));
+            bookings.unshift(newBooking);
+
+            saveBookings();
+            renderBookings(searchInput.value);
+
+            // Kosongkan SEMUA input teks termasuk emel dan tujuan selepas berjaya menempah (kekalkan tarikh)
+            document.getElementById('namaPemohon').value = '';
+            document.getElementById('emelPemohon').value = '';
+            document.getElementById('jabatan').value = '';
+            document.getElementById('tujuan').value = '';
+            document.getElementById('masaMula').value = '';
+            document.getElementById('masaTamat').value = '';
+
+            showToast('Tempahan bilik mesyuarat berjaya disahkan!');
+        });
+
+        // Penapisan carian masa nyata
+        searchInput.addEventListener('input', function(e) {
+            renderBookings(e.target.value);
+        });
+
+        // Papar senarai awal semasa halaman dimuatkan
+        renderBookings();
+    </script>
+</body>
+</html>
